@@ -113,8 +113,9 @@ export function AttributesTable({
               <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-300">
                 {/** Required / Custom / Multi + Type selector */}
                 {(() => {
-                  const disableCustomAndMulti =
-                    newAttrType === "BOOLEAN" || newAttrType === "DATE";
+                  const isBoolean = newAttrType === "BOOLEAN";
+                  const isDate = newAttrType === "DATE";
+                  const disableCustomAndMulti = isBoolean || isDate;
                   return (
                     <>
                 <label className="inline-flex items-center gap-1 cursor-pointer">
@@ -154,8 +155,11 @@ export function AttributesTable({
                             const next = e.target
                               .value as AdminAttributeType;
                             setNewAttrType(next);
-                            if (next === "BOOLEAN" || next === "DATE") {
+                            if (next === "BOOLEAN") {
                               setNewAttrCustom(false);
+                              setNewAttrMultiple(false);
+                            } else if (next === "DATE") {
+                              setNewAttrCustom(true);
                               setNewAttrMultiple(false);
                             }
                           }}
