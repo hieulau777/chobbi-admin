@@ -11,10 +11,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { AdminAttributeValue } from "../types";
+import { AdminAttributeValue, SelectedAttribute } from "../types";
 
 type AttributeValuesManagerProps = {
   selectedAttributeId: number | null;
+  selectedAttribute: SelectedAttribute;
   attributeValues: AdminAttributeValue[] | undefined;
   loadingValues: boolean;
 
@@ -37,6 +38,7 @@ type AttributeValuesManagerProps = {
 
 export function AttributeValuesManager({
   selectedAttributeId,
+  selectedAttribute,
   attributeValues,
   loadingValues,
   newAttributeValuesInput,
@@ -53,6 +55,12 @@ export function AttributeValuesManager({
   updateAttributeValuePending,
   deleteAttributeValue,
 }: AttributeValuesManagerProps) {
+  const disableValues =
+    !selectedAttribute ||
+    selectedAttribute.type === "BOOLEAN" ||
+    selectedAttribute.type === "DATE" ||
+    selectedAttribute.isCustomAllow;
+
   return (
     <Card>
       <CardHeader>
@@ -67,27 +75,38 @@ export function AttributeValuesManager({
           </p>
         ) : (
           <>
-            <Textarea
-              value={newAttributeValuesInput}
-              onChange={(e) => setNewAttributeValuesInput(e.target.value)}
-              placeholder="Nhập nhanh nhiều giá trị, phân tách bằng dấu phẩy. Ví dụ: Nike, Adidas, Puma"
-              className="min-h-[80px] text-xs"
-            />
-            <Button
-              type="button"
-              size="sm"
-              onClick={createAttributeValues}
-              disabled={
-                !newAttributeValuesInput.trim() || createAttributeValuesPending
-              }
-            >
-              {createAttributeValuesPending ? (
-                <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
-              ) : (
-                <Plus className="h-3 w-3 mr-1.5" />
-              )}
-              Thêm values
-            </Button>
+            {disableValues ? (
+              <p className="text-xs text-slate-400">
+                Thuộc tính kiểu BOOLEAN/DATE hoặc allow custom không dùng danh
+                sách giá trị sẵn – người bán sẽ tự nhập giá trị khi tạo sản
+                phẩm.
+              </p>
+            ) : (
+              <>
+                <Textarea
+                  value={newAttributeValuesInput}
+                  onChange={(e) => setNewAttributeValuesInput(e.target.value)}
+                  placeholder="Nhập nhanh nhiều giá trị, phân tách bằng dấu phẩy. Ví dụ: Nike, Adidas, Puma"
+                  className="min-h-[80px] text-xs"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={createAttributeValues}
+                  disabled={
+                    !newAttributeValuesInput.trim() ||
+                    createAttributeValuesPending
+                  }
+                >
+                  {createAttributeValuesPending ? (
+                    <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
+                  ) : (
+                    <Plus className="h-3 w-3 mr-1.5" />
+                  )}
+                  Thêm values
+                </Button>
+              </>
+            )}
 
             {loadingValues ? (
               <div className="flex items-center gap-2 text-slate-400 text-xs mt-2">
@@ -155,7 +174,7 @@ export function AttributeValuesManager({
               </p>
             )}
 
-            {editingValueId && (
+            {editingValueId && !disableValues && (
               <div className="space-y-2 pt-3 border-t border-slate-800 mt-2">
                 <div>
                   <label className="block text-slate-300 mb-1 text-xs">

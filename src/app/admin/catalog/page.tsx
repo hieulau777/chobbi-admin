@@ -85,6 +85,7 @@ export default function CatalogPage() {
 
           <AttributeValuesManager
             selectedAttributeId={catalog.selectedAttributeId}
+            selectedAttribute={catalog.selectedAttribute}
             attributeValues={catalog.attributeValues}
             loadingValues={catalog.loadingValues}
             newAttributeValuesInput={catalog.newAttributeValuesInput}

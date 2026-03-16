@@ -7,6 +7,7 @@ import {
 import { backendFetch } from "@/lib/api";
 import {
   AdminAttribute,
+  AdminAttributeType,
   AdminAttributeValue,
   AdminCategory,
   SelectedAttribute,
@@ -29,6 +30,8 @@ export const useCatalogAdmin = () => {
   const [newAttrRequired, setNewAttrRequired] = useState(false);
   const [newAttrCustom, setNewAttrCustom] = useState(true);
   const [newAttrMultiple, setNewAttrMultiple] = useState(false);
+  const [newAttrType, setNewAttrType] =
+    useState<AdminAttributeType>("TEXT");
 
   const [showAttrEdit, setShowAttrEdit] = useState(false);
   const [editAttrName, setEditAttrName] = useState("");
@@ -222,7 +225,7 @@ export const useCatalogAdmin = () => {
             isRequired: newAttrRequired,
             isCustomAllow: newAttrCustom,
             isMultipleAllow: newAttrMultiple,
-            type: "TEXT",
+            type: newAttrType,
           }),
         }
       );
@@ -237,6 +240,7 @@ export const useCatalogAdmin = () => {
       setNewAttrRequired(false);
       setNewAttrCustom(true);
       setNewAttrMultiple(false);
+      setNewAttrType("TEXT");
       queryClient.invalidateQueries({
         queryKey: ["admin-attributes", selectedCategoryId],
       });
@@ -448,6 +452,8 @@ export const useCatalogAdmin = () => {
     editAttrMultiple,
     setEditAttrMultiple,
     selectedAttribute,
+    newAttrType,
+    setNewAttrType,
     createAttribute,
     updateAttribute,
     deleteAttribute,

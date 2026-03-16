@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { AdminAttribute } from "../types";
+import { AdminAttribute, AdminAttributeType } from "../types";
 
 type AttributesTableProps = {
   selectedCategoryId: number | null;
@@ -26,6 +26,8 @@ type AttributesTableProps = {
   setNewAttrCustom: (value: boolean) => void;
   newAttrMultiple: boolean;
   setNewAttrMultiple: (value: boolean) => void;
+  newAttrType: AdminAttributeType;
+  setNewAttrType: (value: AdminAttributeType) => void;
   createAttribute: () => void;
   createAttributePending: boolean;
 
@@ -56,6 +58,8 @@ export function AttributesTable({
   setNewAttrCustom,
   newAttrMultiple,
   setNewAttrMultiple,
+  newAttrType,
+  setNewAttrType,
   createAttribute,
   createAttributePending,
   selectedAttributeId,
@@ -107,6 +111,12 @@ export function AttributesTable({
                 </Button>
               </div>
               <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-300">
+                {/** Required / Custom / Multi + Type selector */}
+                {(() => {
+                  const disableCustomAndMulti =
+                    newAttrType === "BOOLEAN" || newAttrType === "DATE";
+                  return (
+                    <>
                 <label className="inline-flex items-center gap-1 cursor-pointer">
                   <input
                     type="checkbox"
@@ -120,6 +130,7 @@ export function AttributesTable({
                   <input
                     type="checkbox"
                     checked={newAttrCustom}
+                          disabled={disableCustomAndMulti}
                     onChange={(e) => setNewAttrCustom(e.target.checked)}
                     className="h-3 w-3 rounded border-slate-600 bg-slate-950 text-indigo-500"
                   />
@@ -129,11 +140,36 @@ export function AttributesTable({
                   <input
                     type="checkbox"
                     checked={newAttrMultiple}
+                          disabled={disableCustomAndMulti}
                     onChange={(e) => setNewAttrMultiple(e.target.checked)}
                     className="h-3 w-3 rounded border-slate-600 bg-slate-950 text-indigo-500"
                   />
                   <span>Allow multi-select</span>
                 </label>
+                      <label className="inline-flex items-center gap-1">
+                        <span>Type</span>
+                        <select
+                          value={newAttrType}
+                          onChange={(e) => {
+                            const next = e.target
+                              .value as AdminAttributeType;
+                            setNewAttrType(next);
+                            if (next === "BOOLEAN" || next === "DATE") {
+                              setNewAttrCustom(false);
+                              setNewAttrMultiple(false);
+                            }
+                          }}
+                          className="rounded-md border border-slate-600 bg-slate-950 px-1.5 py-1 text-[11px]"
+                        >
+                          <option value="TEXT">TEXT</option>
+                          <option value="NUMBER">NUMBER</option>
+                          <option value="BOOLEAN">BOOLEAN</option>
+                          <option value="DATE">DATE</option>
+                        </select>
+                      </label>
+                    </>
+                  );
+                })()}
               </div>
             </div>
 

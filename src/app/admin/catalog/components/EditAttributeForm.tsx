@@ -34,6 +34,9 @@ export function EditAttributeForm({
 }: EditAttributeFormProps) {
   if (!selectedAttribute || !showAttrEdit) return null;
 
+  const isBooleanOrDate =
+    selectedAttribute.type === "BOOLEAN" || selectedAttribute.type === "DATE";
+
   return (
     <Card>
       <CardHeader>
@@ -50,6 +53,9 @@ export function EditAttributeForm({
             className="w-full rounded-md border border-slate-700 bg-slate-950/70 px-2 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           />
         </div>
+        <p className="text-[11px] text-slate-400">
+          Type: <span className="font-mono">{selectedAttribute.type}</span>
+        </p>
         <div className="flex flex-wrap items-center gap-4">
           <label className="inline-flex items-center gap-1 cursor-pointer">
             <input
@@ -64,6 +70,7 @@ export function EditAttributeForm({
             <input
               type="checkbox"
               checked={editAttrCustom}
+              disabled={isBooleanOrDate}
               onChange={(e) => setEditAttrCustom(e.target.checked)}
               className="h-3 w-3 rounded border-slate-600 bg-slate-950 text-indigo-500"
             />
@@ -73,6 +80,7 @@ export function EditAttributeForm({
             <input
               type="checkbox"
               checked={editAttrMultiple}
+              disabled={isBooleanOrDate}
               onChange={(e) => setEditAttrMultiple(e.target.checked)}
               className="h-3 w-3 rounded border-slate-600 bg-slate-950 text-indigo-500"
             />
