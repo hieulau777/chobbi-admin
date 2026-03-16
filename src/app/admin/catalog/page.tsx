@@ -56,6 +56,8 @@ export default function CatalogPage() {
             setNewAttrCustom={catalog.setNewAttrCustom}
             newAttrMultiple={catalog.newAttrMultiple}
             setNewAttrMultiple={catalog.setNewAttrMultiple}
+            newAttrType={catalog.newAttrType}
+            setNewAttrType={catalog.setNewAttrType}
             createAttribute={catalog.createAttribute}
             createAttributePending={catalog.createAttributePending}
             selectedAttributeId={catalog.selectedAttributeId}
