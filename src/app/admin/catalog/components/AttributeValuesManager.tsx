@@ -58,8 +58,7 @@ export function AttributeValuesManager({
   const disableValues =
     !selectedAttribute ||
     selectedAttribute.type === "BOOLEAN" ||
-    selectedAttribute.type === "DATE" ||
-    selectedAttribute.isCustomAllow;
+    selectedAttribute.type === "DATE";
 
   return (
     <Card>
